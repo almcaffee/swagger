@@ -1,0 +1,1949 @@
+openapi: 3.0.1
+info:
+  title: ConnectionPoint
+  description: Case Consumer REST API
+  termsOfService: ""
+  contact:
+    email: someone@maximus.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Maximus MARS Project
+  url: https://swagger.pcf-maximus.com
+servers:
+  - url: "https://{environment}"
+    variables:
+      environment:
+        default: max-nonprod-intg.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+        enum:
+          - max-nonprod-intg.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+          - max-nonprod-qa.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+          - max-nonprod-demo.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+          - max-nonprod-uat.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+          - max-nonprod-perf.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+          - max-uat.apigee.pcf-maximus.com/mars-consumer-api/app/crm
+          - max-nonprod-dev.apigee.pcf-maximus.com/mars-consumer-microservices-dev/app/crm
+tags:
+  - name: case
+    description: Case Information
+  - name: consumer
+    description: Consumer Information
+paths:
+  /cases/{consumerId}:
+    get:
+      tags:
+        - consumer
+      summary: Get case member information
+      operationId: getCaseConsumerById
+      parameters:
+        - name: consumerId
+          in: path
+          description: Consumer ID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+        404:
+          description: Consumer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        405:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+        500:
+          description: Server exception
+          content: {}
+  /caseloader/consumers:
+    post:
+      tags:
+        - consumer
+      summary: Get caseloader consumer status
+      operationId: getCaseConsumerStatus
+      requestBody:
+        description: <b>Required properties</b>
+          <ul>
+          <li>consumerIdentificationNumber
+          <ul>
+          <li>at least <b>1</b> of  <b>consumerId</b>, <b>externalConsumerId</b></li>
+          </ul>
+          </li>
+          <li>consumerIdType</li>
+          </ul>
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseConsumerRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CaseConsumerRequest"
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ConsumerStatus"
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ConsumerStatus"
+        404:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        405:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+        500:
+          description: Server exception
+          content: {}
+      x-codegen-request-body-name: consumerSearchReques
+  /consumer:
+    put:
+      tags:
+        - consumer
+      summary: Save or update consumer
+      operationId: saveConsumer
+      requestBody:
+        description: <b>Required properties</b>
+          <ul>
+          <li>communicationPreferences</li>
+          <li>consumerConsent</li>
+          <li>consumerDateOfBirth</li>
+          <li>consumerFirstName</li>
+          <li>consumerLastName</li>
+          <li>consumerType</li>
+          <li>spokenLanguageCode</li>
+          <li>writtenLanguageCode</li>
+          <li>at least <b>1</b> of <b>contact</b> objects - address, email, phone</li>
+          </ul>
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiResponse"
+                - type: object
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/Consumer"
+          application/xml:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiResponse"
+                - type: object
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/Consumer"
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+        404:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        405:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+        500:
+          description: Server exception
+          content: {}
+      x-codegen-request-body-name: consumerSaveRequest
+  /consumers:
+    post:
+      tags:
+        - consumer
+      summary: Search consumers
+      operationId: searchConsumers
+      requestBody:
+        description: <b>Required properties</b>
+          <ul>
+          <li>At least <b>1</b> property excluding <b>caseType</b>, <b>consumerType</b></li>
+          </ul>
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiResponse"
+                - type: object
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/ConsumerRequest"
+          application/xml:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiResponse"
+                - type: object
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/ConsumerRequest"
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+        404:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        405:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+        500:
+          description: Server exception
+          content: {}
+      x-codegen-request-body-name: consumerSearchRequest
+  /consumers/{consumerId}:
+    get:
+      tags:
+        - consumer
+      summary: Get consumer information
+      operationId: getConsumerById
+      parameters:
+        - name: consumerId
+          in: path
+          description: Consumer ID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Consumer"
+        404:
+          description: Consumer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        405:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+        500:
+          description: Server exception
+          content: {}
+  /consumers/consumerStatus/{consumerId}:
+    get:
+      tags:
+        - consumer
+      summary: Get consumer status
+      operationId: getConsumerStatusById
+      parameters:
+        - name: consumerId
+          in: path
+          description: Consumer ID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ConsumerStatus"
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ConsumerStatus"
+        404:
+          description: Consumer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        405:
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/ValidationResponse"
+        500:
+          description: Server exception
+          content: {}
+components:
+  securitySchemes:
+    tokenAuth:
+      type: https
+      scheme: bearer
+      bearerFormat: JWT
+    projectAuth:
+      type: apiKey
+      in: header
+      name: Project-Name
+  schemas:
+    aGenericEnum:
+      type: string
+      enum:
+        - Enum
+    addressType:
+      type: string
+      enum:
+        - Mailing
+        - Physical
+    caseMemberRole:
+      type: string
+      enum:
+        - Primary Individual
+        - Authorized Representative
+        - Case Member
+        - Member
+        - Broker
+        - Assister
+    contactType:
+      type: string
+      enum:
+        - General
+        - Third Party
+        - Unidentified
+    contactChannelType:
+      type: string
+      enum:
+        - Phone
+        - Email
+        - SMS
+        - Text
+    contactRecordType:
+      type: string
+      enum:
+        - Inbound
+        - Outbound
+    consumerRole:
+      allOf:
+        - $ref: "#/components/schemas/consumerType"
+        - $ref: "#/components/schemas/caseMemberRole"
+    consumerStatus:
+      type: string
+      enum:
+        - Active
+        - Inactive
+        - Future
+    consumerType:
+      type: string
+      enum:
+        - Agency
+        - Anonymous
+        - Consumer
+        - Media
+        - Provider
+    externalRef:
+      required:
+        - externalRefId
+        - externalRefType
+      type: object
+      properties:
+        externalRefId:
+          type: integer
+          description: Property description
+          format: int32
+        externalRefType:
+          $ref: "#/components/schemas/refType"
+    internalRef:
+      required:
+        - internalRefId
+        - internalRefType
+      type: object
+      properties:
+        internalRefId:
+          type: integer
+          description: Property description
+          format: int32
+        internalRefType:
+          $ref: "#/components/schemas/refType"
+    language:
+      type: string
+      enum:
+        - English
+        - Spanish
+        - Mandarin
+        - Portuguese
+        - Tagalog
+        - Italian
+        - Korean
+        - Gujarati
+        - Polish
+        - Hindi
+        - Arabic
+    linkRef:
+      type: object
+      properties:
+        linkRefId:
+          type: integer
+          description: Property description
+          format: int32
+        linkRefType:
+          $ref: "#/components/schemas/refType"
+    phoneType:
+      type: string
+      enum:
+        - Cell
+        - Fax
+        - Home
+        - Work
+    refType:
+      type: string
+      description: Internal or exteral type
+      enum:
+        - CASE
+        - CONSUMER
+        - CONTACT
+        - CORRESPONDENCE
+        - TASK
+        - SERVREQ
+    searchType:
+      type: string
+      description: Identification number type
+      enum:
+        - Internal
+        - CHIP
+        - GetInsured
+        - Medicaid
+    baseEnum:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - type: object
+          properties:
+            childEnum:
+              type: string
+              description: Property description
+            childEnumMap:
+              type: string
+              description: Property description
+            description:
+              type: string
+              description: Property description
+            enumTables:
+              type: string
+              description: Property description
+            orderbyDefault:
+              type: integer
+              description: Property description
+              format: int32
+            tableName:
+              type: string
+              description: Property description
+    Address:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - addressCity
+            - addressCounty
+            - addressState
+            - addressStreet1
+            - addressType
+            - addressZip
+            - primaryIndicator
+          type: object
+          properties:
+            addrAttn:
+              type: string
+              description: Property description
+            addrHouseCode:
+              type: string
+              description: Property description
+            addressCity:
+              type: string
+              description: Property description
+            addressCorrelationId:
+              type: string
+              description: Property description
+            addressCounty:
+              type: string
+              description: Property description
+            addressId:
+              type: integer
+              description: Property description
+              format: int32
+            addressState:
+              type: string
+              description: Property description
+            addressStreet1:
+              type: string
+              description: Property description
+            addressStreet2:
+              type: string
+              description: Property description
+            addressType:
+              $ref: "#/components/schemas/addressType"
+            addressVerificationSource:
+              type: string
+              description: Property description
+            addressVerified:
+              type: boolean
+              default: false
+            addressVerifiedDate:
+              type: string
+              description: Property description
+              format: date-time
+            addressZip:
+              type: string
+              description: Property description
+            addressZipFour:
+              type: string
+              description: Property description
+            badAddressSetDate:
+              type: string
+              description: Property description
+              format: date-time
+            badAddressSource:
+              type: string
+              description: Property description
+            contactTypeId:
+              type: integer
+              description: Property description
+              format: int32
+            geoCodeAttributes:
+              type: string
+              description: Property description
+            intelligentMailBarcode:
+              type: string
+              description: Property description
+            primaryIndicator:
+              type: boolean
+              default: false
+    CaseIdentificationNumber:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - type: object
+          properties:
+            agencyName:
+              type: string
+              description: Associated agency
+            caseId:
+              type: integer
+              description: Internal case id
+              format: int32
+            caseIdentificationNumberId:
+              type: string
+              description: External case id
+            caseIdentificationNumberIdType:
+              type: string
+              description: External case type
+            caseIdentificationNumberIdTypeReportLabel:
+              type: string
+              description: External case type label
+            externalCaseId:
+              type: integer
+              description: Internal consumer id
+              format: int32
+            identificationNumberType:
+              $ref: "#/components/schemas/searchType"
+    CommunicationPreferences:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - type: object
+          properties:
+            caseId:
+              type: integer
+              description: Property description
+              format: int32
+            communicationPreferencesId:
+              type: integer
+              description: Property description
+              format: int32
+            consumerId:
+              type: integer
+              description: Property description
+              format: int32
+            defaultInd:
+              type: boolean
+              description: Property description
+              default: false
+            valuePairIdCommPref:
+              $ref: "#/components/schemas/aGenericEnum"
+    CaseConsumer:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - $ref: "#/components/schemas/Event"
+        - required:
+            - caseId
+          type: object
+          properties:
+            assistiveHearingServicesIndicator:
+              type: boolean
+              description: Property description
+              default: false
+            caseConsumers:
+              type: array
+              items:
+                $ref: "#/components/schemas/CaseConsumer"
+            caseId:
+              type: integer
+              description: Property description
+              format: int32
+            caseIdentificationNumber:
+              type: array
+              items:
+                $ref: "#/components/schemas/CaseIdentificationNumber"
+            caseStatus:
+              type: string
+              description: Property description
+            caseType:
+              type: string
+              description: Property description
+            contacts:
+              $ref: "#/components/schemas/Contacts"
+            needTranslatorIndicator:
+              type: boolean
+              description: Property description
+              default: false
+            portfolioId:
+              type: integer
+              description: Property description
+              format: int32
+            primaryIndividualId:
+              type: integer
+              description: Property description
+              format: int32
+            programName:
+              type: string
+              description: Property description
+            spokenLanguageCode:
+              $ref: "#/components/schemas/language"
+            subProgramName:
+              type: string
+              description: Property description
+            translatorLanguageCode:
+              type: string
+              description: Property description
+            writtenLanguageCode:
+              $ref: "#/components/schemas/language"
+    CaseConsumerRequest:
+      type: object
+      properties:
+        consumerFirstName:
+          type: string
+        consumerIdType:
+          $ref: "#/components/schemas/searchType"
+        consumerIdentificationNumber:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConsumerIdentificationNumber"
+        consumerLastName:
+          type: string
+        dob:
+          format: ^\d{4}-\d{2}-\d{2}$
+          type: string
+        ssn:
+          type: string
+          format: ^\d{9}$
+    Consumer:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - $ref: "#/components/schemas/Event"
+        - required:
+            - communicationPreferences
+            - consumerConsent
+            - consumerDateOfBirth
+            - consumerFirstName
+            - consumerLastName
+            - consumerType
+            - spokenLanguageCode
+            - writtenLanguageCode
+          type: object
+          properties:
+            aiNa:
+              type: boolean
+              description: Property description
+              default: false
+            accessType:
+              $ref: "#/components/schemas/aGenericEnum"
+            caseConsumer:
+              type: array
+              items:
+                $ref: "#/components/schemas/CaseConsumer"
+            caseId:
+              type: integer
+              description: Property description
+              format: int32
+            citizenship:
+              $ref: "#/components/schemas/aGenericEnum"
+            communicationPreferences:
+              type: array
+              items:
+                $ref: "#/components/schemas/CommunicationPreferences"
+            consumerConsent:
+              type: array
+              items:
+                $ref: "#/components/schemas/ConsumerConsent"
+            consumerDateOfBirth:
+              type: string
+              description: Date of birth
+              format: date-time
+            consumerFirstName:
+              type: string
+              description: Property Description
+            consumerId:
+              type: integer
+              description: Property description
+              format: int32
+            consumerIdentificationNumber:
+              type: array
+              items:
+                $ref: "#/components/schemas/ConsumerIdentificationNumber"
+            consumerIdentificationNumberRequest:
+              type: array
+              items:
+                $ref: "#/components/schemas/ConsumerIdentificationNumber"
+            consumerLastName:
+              type: string
+              description: Property Description
+            consumerMiddleName:
+              type: string
+              description: Property Description
+            consumerPrefix:
+              type: string
+              description: Property Description
+            consumerRole:
+              $ref: "#/components/schemas/consumerRole"
+            consumerSSN:
+              type: string
+              description: Property description
+              format: ^\d{9}$
+            consumerStatus:
+              $ref: "#/components/schemas/consumerStatus"
+            consumerSuffix:
+              type: string
+              description: Property Description
+            consumerType:
+              $ref: "#/components/schemas/consumerType"
+            contacts:
+              $ref: "#/components/schemas/Contacts"
+            correspondencePreference:
+              $ref: "#/components/schemas/aGenericEnum"
+            eligibility:
+              type: array
+              items:
+                $ref: "#/components/schemas/Eligibility"
+            enrollment:
+              type: array
+              items:
+                $ref: "#/components/schemas/Enrollment"
+            ethinicityCode:
+              type: string
+              description: Property Description
+            genderCode:
+              $ref: "#/components/schemas/aGenericEnum"
+            mergeReason:
+              type: string
+              description: Property Description
+            mergedConsumerId:
+              type: integer
+              description: Property description
+              format: int32
+            notBornInd:
+              type: boolean
+              description: Property description
+              default: false
+            pregnancyDueDate:
+              type: string
+              description: Property description
+              format: date-time
+            pregnancyInd:
+              type: boolean
+              description: Property description
+              default: false
+            raceCode:
+              type: string
+              description: Property Description
+            receiveCorrespondence:
+              type: string
+              description: Property Description
+            recordId:
+              type: integer
+              description: Property description
+              format: int32
+            relationShip:
+              type: string
+              description: Property Description
+            spokenLanguageCode:
+              type: string
+              description: Property Description
+            ssnValidationAgency:
+              type: string
+              description: Property Description
+            ssnValidationCode:
+              type: string
+              description: Property Description
+            usResidentStatusCode:
+              type: string
+              description: Property description
+            writtenLanguageCode:
+              $ref: "#/components/schemas/language"
+    ConsumerConsent:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - type: object
+          properties:
+            consentType:
+              $ref: "#/components/schemas/aGenericEnum"
+            consumerConsentId:
+              type: integer
+              description: Property description
+              format: int32
+            consumerId:
+              type: integer
+              description: Property description
+              format: int32
+            dateOfConsent:
+              type: string
+              description: End date
+              format: date-time
+            howConsentProvided:
+              $ref: "#/components/schemas/aGenericEnum"
+            optIn:
+              type: boolean
+              description: Property description
+              default: false
+    ConsumerIdentificationNumber:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - consumerId
+            - externalConsumerId
+          type: object
+          properties:
+            uiid:
+              type: string
+              description: Unique uiid
+              format: uuid
+            correlationid:
+              type: string
+              description: Unique correlation id
+              format: uuid
+            agencyName:
+              type: string
+              description: Associated agency
+            consumerId:
+              type: integer
+              description: Internal consumer id
+              format: int32
+            consumerIdentificationNumberId:
+              type: string
+              description: External consumer id
+            externalConsumerId:
+              type: integer
+              description: Internal consumer id
+              format: int32
+            identificationNumberType:
+              $ref: "#/components/schemas/searchType"
+    ConsumerRequest:
+      required:
+        - communicationPreferences
+        - consumerConsent
+        - consumerDateOfBirth
+        - consumerFirstName
+        - consumerLastName
+        - consumerType
+        - spokenLanguageCode
+        - writtenLanguageCode
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Property description
+          format: int32
+        caseIdentificationNo:
+          $ref: "#/components/schemas/CaseIdentificationNumber"
+        caseType:
+          $ref: "#/components/schemas/searchType"
+        consumerAddress1:
+          type: string
+          description: Property description
+        consumerAddress2:
+          type: string
+          description: Property description
+        consumerCity:
+          type: string
+          description: Property description
+        consumerCounty:
+          type: string
+          description: Property description
+        consumerDateOfBirth:
+          type: string
+          description: Property description
+          format: date-time
+        consumerEmail:
+          format: ^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{3})+$
+          type: string
+          description: Property description
+        consumerFirstName:
+          type: string
+          description: Property description
+        consumerId:
+          type: integer
+          description: Internal consumer id
+          format: int32
+        consumerIdentificationNo:
+          $ref: "#/components/schemas/ConsumerIdentificationNumber"
+        consumerLastName:
+          type: string
+          description: Property description
+        consumerMiddleName:
+          type: string
+          description: Property description
+        consumerPhoneNumber:
+          type: string
+          description: Property description
+        consumerSSN:
+          type: string
+          description: Property description
+          format: ^\d{9}$
+        consumerState:
+          type: string
+          description: Property description
+        consumerType:
+          $ref: "#/components/schemas/searchType"
+        zipCode:
+          type: string
+          description: Property description
+    ConsumerStatus:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - type: object
+          properties:
+            consumerStatus:
+              type: string
+              description: Consumer status
+    ContactRecordRequest:
+      allOf:
+        - $ref: "#/components/schemas/WrapUpTime"
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/TimeStamp"
+        - $ref: "#/components/schemas/linkRef"
+        - type: object
+          properties:
+            callDuration:
+              type: integer
+              description: Property description
+              format: int32
+            consumerAuthenticatedInd:
+              type: boolean
+              description: Property description
+              default: false
+            consumerEmail:
+              format: ^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{3})+$
+              type: string
+              description: Property description
+            consumerFirstName:
+              type: string
+              description: Property description
+            consumerLastName:
+              type: string
+              description: Property description
+            consumerPhone:
+              format: ^\d{9}$
+              type: string
+              description: Property description
+            consumerType:
+              $ref: "#/components/schemas/consumerType"
+            contactCampaignType:
+              $ref: "#/components/schemas/aGenericEnum"
+            contactChannelType:
+              $ref: "#/components/schemas/contactChannelType"
+            contactOutcome:
+              $ref: "#/components/schemas/aGenericEnum"
+            contactReasonEditType:
+              $ref: "#/components/schemas/aGenericEnum"
+            contactRecordEndTime:
+              type: string
+              description: End date
+              format: date-time
+            contactRecordId:
+              type: integer
+              description: Property description
+              format: int32
+            contactRecordStartTime:
+              type: string
+              description: End date
+              format: date-time
+            contactRecordStatusType:
+              $ref: "#/components/schemas/aGenericEnum"
+            contactRecordType:
+              $ref: "#/components/schemas/contactRecordType"
+            contactType:
+              $ref: "#/components/schemas/contactType"
+            organizationName:
+              type: string
+              description: Property description
+            programTypes:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProgramType"
+            preferredLanguageCode:
+              type: string
+              description: Property description
+    Contacts:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/externalRef"
+        - type: object
+          properties:
+            address:
+              $ref: "#/components/schemas/Address"
+            email:
+              $ref: "#/components/schemas/Email"
+            phone:
+              $ref: "#/components/schemas/Phone"
+    CoreEligibility:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - consumerId
+            - coverageCode
+            - programCode
+          type: object
+          properties:
+            categoryCode:
+              type: string
+              description: Property description
+            consumerDeprivationCode:
+              type: string
+              description: Property description
+            consumerId:
+              type: integer
+              description: Property description
+              format: int32
+            consumerMaintenanceCode:
+              type: string
+              description: Property description
+            coreEligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            coverageCode:
+              type: string
+              description: Property description
+            eligibilityEndReason:
+              type: string
+              description: Property description
+            eligibilityStatusCode:
+              type: string
+              description: Property description
+            exemptionCode:
+              type: string
+              description: Property description
+            fileHandle:
+              type: string
+              description: Property description
+            programCode:
+              type: string
+              description: Property description
+            programTypeCode:
+              type: string
+              description: Property description
+            referralCountyCode:
+              type: string
+              description: Property description
+            subProgramTypeCode:
+              type: string
+              description: Property description
+    Date:
+      required:
+        - endDate
+        - startDate
+      type: object
+      properties:
+        startDate:
+          format: ^\d{4}-\d{2}-\d{2}$
+          type: string
+          description: Start date
+        endDate:
+          type: string
+          description: End date
+          format: date-time
+    EffectiveTimeStamp:
+      required:
+        - effectiveStartDate
+      type: object
+      properties:
+        effectiveStartDate:
+          type: string
+          description: Start date
+          format: date-time
+        effectiveEndDate:
+          type: string
+          description: End date
+          format: date-time
+    Eligibility:
+      type: object
+      properties:
+        dbChanges:
+          type: string
+          description: Property description
+        eligibilityStatus:
+          $ref: "#/components/schemas/aGenericEnum"
+        coreEligibility:
+          $ref: "#/components/schemas/CoreEligibility"
+        facilityInfo:
+          $ref: "#/components/schemas/FacilityInfo"
+        financialInfo:
+          $ref: "#/components/schemas/FinancialInfo"
+        futureEligibility:
+          $ref: "#/components/schemas/FutureEligibility"
+        hospiceInfo:
+          $ref: "#/components/schemas/HospiceInfo"
+        longTermCareInfo:
+          $ref: "#/components/schemas/LongTermCareInfo"
+        medicareInfo:
+          $ref: "#/components/schemas/MedicareInfo"
+        recordId:
+          type: integer
+          description: Property description
+          format: int32
+        specialPopulationInfo:
+          $ref: "#/components/schemas/SpecialPopulationInfo"
+        thirdPartyInsuranceInfo:
+          $ref: "#/components/schemas/ThirdPartyInsuranceInfo"
+        waiverInfo:
+          $ref: "#/components/schemas/WaiverInfo"
+    Email:
+      allOf:
+        - $ref: "#/components/schemas/TimeStamp"
+        - type: object
+          properties:
+            canReceiveTextInd:
+              type: boolean
+              description: Property description
+              default: false
+            contactTypeId:
+              type: integer
+              description: Property description
+              format: int32
+            doesNotWorkInd:
+              type: boolean
+              description: Property description
+              default: false
+            emailAddress:
+              format: ^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{3})+$
+              type: string
+              description: Property description
+            emailCorrelationId:
+              type: string
+              description: Property description
+              format: uuid
+            emailId:
+              type: integer
+              description: Property description
+              format: int32
+            emailType:
+              $ref: "#/components/schemas/aGenericEnum"
+            primaryIndicator:
+              type: boolean
+              description: Property description
+              default: false
+    Enrollment:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/TimeStamp"
+        - $ref: "#/components/schemas/Date"
+        - required:
+            - consumerId
+            - enrollmentId
+            - enrollmentProvider
+            - planCode
+            - status
+          type: object
+          properties:
+            aidCategoryCode:
+              type: string
+              description: Property description
+            anniversaryDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            autoAssignIndicator:
+              type: string
+              description: Property description
+            channel:
+              type: string
+              description: Property description
+            consumerId:
+              type: integer
+              description: Property description
+              format: int32
+            enrollmentId:
+              type: integer
+              description: Property description
+              format: int32
+            enrollmentProvider:
+              $ref: "#/components/schemas/EnrollmentProvider"
+            enrollmentTimeframe:
+              type: string
+              description: Property description
+            enrollmentType:
+              $ref: "#/components/schemas/aGenericEnum"
+            lockInEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            lockInExemptionReason:
+              type: string
+              description: Property description
+            lockInStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            lockInStatusCode:
+              type: string
+              description: Property description
+            openEnrollmentEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            openEnrollmentStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            openEnrollmentStatus:
+              type: string
+              description: Property description
+            planCode:
+              type: string
+              description: Property description
+            planEndDateReason:
+              type: string
+              description: Property description
+            planId:
+              type: integer
+              description: Property description
+              format: int32
+            processingMethod:
+              type: string
+              description: Property description
+            programTypeCode:
+              type: string
+              description: Property description
+            providerSelectionStatus:
+              type: string
+              description: Property description
+            recordId:
+              type: integer
+              description: Property description
+              format: int32
+            reinstatementDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            reinstatementIndicator:
+              type: string
+              description: Property description
+            retroactiveDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            retroactiveIndicator:
+              type: string
+              description: Property description
+            riskCode:
+              type: string
+              description: Property description
+            selectionReason:
+              type: string
+              description: Property description
+            selectionTxnId:
+              type: integer
+              description: Property description
+              format: int32
+            selectionType:
+              $ref: "#/components/schemas/aGenericEnum"
+            serviceRegionCode:
+              type: string
+              description: Property description
+            specialNeedFlag:
+              type: string
+              description: Property description
+            specialSituation:
+              type: string
+              description: Property description
+            status:
+              type: string
+              description: Property description
+            subProgramTypeCode:
+              type: string
+              description: Property description
+            txnReceivedDate:
+              type: string
+              description: Property description
+              format: date-time
+            txnStatus:
+              type: string
+              description: Property description
+            txnStatusDate:
+              type: string
+              description: Property description
+              format: date-time
+            waiverCode:
+              type: string
+              description: Property description
+    EnrollmentProvider:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - consumerId
+            - enrollmentId
+            - enrollmentProviderId
+            - providerId
+            - providerPhoneNumber
+          type: object
+          properties:
+            consumerId:
+              type: integer
+              description: Property description
+              format: int32
+            enrollmentId:
+              type: integer
+              description: Property description
+              format: int32
+            enrollmentProviderId:
+              type: integer
+              description: Property description
+              format: int32
+            providerAddressCity:
+              type: string
+              description: Property description
+            providerAddressCounty:
+              type: string
+              description: Property description
+            providerAddressLine1:
+              type: string
+              description: Property description
+            providerAddressLine2:
+              type: string
+              description: Property description
+            providerAddressState:
+              type: string
+              description: Property description
+            providerEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            providerFirstName:
+              type: string
+              description: Property description
+            providerId:
+              type: string
+              description: Property description
+            providerLastName:
+              type: string
+              description: Property description
+            providerMiddleName:
+              type: string
+              description: Property description
+            providerNpi:
+              type: string
+              description: Property description
+            providerPhoneNumber:
+              type: string
+              description: Property description
+            providerStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            providerType:
+              type: string
+              description: Property description
+            providerZipCodeExtn:
+              type: string
+              description: Property description
+            providerZipCodeMain:
+              type: string
+              description: Property description
+            stateEnrollmentDataId:
+              type: integer
+              description: Property description
+              format: int32
+    Event:
+      required:
+        - correlationid
+        - uiid
+      type: object
+      properties:
+        uiid:
+          type: string
+          description: Unique uiid
+          format: uuid
+        correlationid:
+          type: string
+          description: Unique correlation id
+          format: uuid
+    FacilityInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - placementCode
+            - placementCountyCode
+          type: object
+          properties:
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            placementCode:
+              type: string
+              description: Property description
+            placementCountyCode:
+              type: string
+              description: Property description
+            referralCountyCode:
+              type: string
+              description: Property description
+    FinancialInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - caseId
+            - familySize
+            - income
+          type: object
+          properties:
+            caseId:
+              type: integer
+              description: Property description
+              format: int32
+            costShareAmount:
+              type: integer
+              description: Property description
+              format: int32
+            familySize:
+              type: integer
+              description: Property description
+              format: int32
+            fpil:
+              type: integer
+              description: Property description
+              format: int32
+            income:
+              type: integer
+              description: Property description
+              format: int32
+            spendDownCode:
+              type: string
+              description: Property description
+    FutureEligibility:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - required:
+            - coverageCode
+            - programCode
+          type: object
+          properties:
+            categoryCode:
+              type: string
+              description: Property description
+            coreEligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            coverageCode:
+              type: string
+              description: Property description
+            eligibilityStatusCode:
+              type: string
+              description: Property description
+            exemptionCode:
+              type: string
+              description: Property description
+            programCode:
+              type: string
+              description: Property description
+    HospiceInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - hospiceIndicator
+          type: object
+          properties:
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            hospiceIndicator:
+              type: string
+              description: Property description
+    LongTermCareInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - coverageCode
+            - providerName
+          type: object
+          properties:
+            coverageCode:
+              type: string
+              description: Property description
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            npiId:
+              type: string
+              description: Property description
+            providerName:
+              type: string
+              description: Property description
+    MedicareInfo:
+      allOf:
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - partAStartDate
+            - titleXVIII
+          type: object
+          properties:
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            partAEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            partAStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            partBEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            partBStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            partDEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            partDStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            titleXVIII:
+              type: string
+              description: Property description
+            titleXVIIIEndDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+            titleXVIIIStartDate:
+              format: ^\d{4}-\d{2}-\d{2}$
+              type: string
+              description: Property description
+    Phone:
+      allOf:
+        - $ref: "#/components/schemas/EffectiveTimeStamp"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - phoneNumber
+            - phoneType
+            - primaryIndicator
+          type: object
+          properties:
+            canReceiveTextInd:
+              type: boolean
+              description: Property description
+              default: false
+            comments:
+              type: string
+              description: Property description
+            contactTypeId:
+              type: integer
+              description: Property description
+              format: int32
+            doesNotWorkInd:
+              type: boolean
+              description: Property description
+              default: false
+            phoneCorrelationId:
+              type: string
+              description: Property description
+              format: uuid
+            phoneId:
+              type: integer
+              description: Property description
+              format: int32
+            phoneNumber:
+              format: ^\d{10}
+              type: string
+              description: Property description
+            phoneType:
+              $ref: "#/components/schemas/phoneType"
+            primaryIndicator:
+              type: boolean
+              description: Property description
+              default: false
+            smsEnabledInd:
+              type: boolean
+              description: Property description
+              default: false
+    ProgramType:
+      type: object
+      properties:
+        contactRecordId:
+          type: integer
+          description: Property description
+          format: int32
+        programType:
+          $ref: "#/components/schemas/aGenericEnum"
+        programTypeId:
+          type: integer
+          description: Property description
+          format: int32
+        status:
+          type: string
+          description: Property description
+    SpecialPopulationInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - specialEligibilityCode
+            - specialPopulationCaseNumber
+          type: object
+          properties:
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            specialEligibilityCode:
+              type: string
+              description: Property description
+            specialPopulationCaseNumber:
+              type: string
+              description: Property description
+            specialPopulationIndicator:
+              type: string
+              description: Property description
+    ThirdPartyInsuranceInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - insuranceCode
+            - insuranceGroupNumber
+            - insuranceName
+            - insurancePolicyHolderName
+          type: object
+          properties:
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            insuranceCode:
+              type: string
+              description: Property description
+            insuranceGroupNumber:
+              type: string
+              description: Property description
+            insuranceName:
+              type: string
+              description: Property description
+            insurancePolicyHolderName:
+              type: string
+              description: Property description
+            insuranceSource:
+              type: string
+              description: Property description
+    TimeStamp:
+      required:
+        - createdBy
+        - createdOn
+        - updatedBy
+      type: object
+      properties:
+        createdBy:
+          maximum: 5
+          type: integer
+          description: Created by
+          format: int32
+        createdOn:
+          type: string
+          description: Created on
+          format: date-time
+        updatedBy:
+          type: string
+          description: Update by
+          format: date-time
+        updateOn:
+          type: string
+          description: Update on
+          format: date-time
+    WaiverInfo:
+      allOf:
+        - $ref: "#/components/schemas/Date"
+        - $ref: "#/components/schemas/TimeStamp"
+        - required:
+            - waiverCode
+          type: object
+          properties:
+            eligibilitySegmentsId:
+              type: integer
+              description: Property description
+              format: int32
+            waiverCode:
+              type: string
+              description: Property description
+            waiverCounty:
+              type: string
+              description: Property description
+    WrapUpTime:
+      type: object
+      properties:
+        hour:
+          maximum: 23
+          minimum: 0
+          type: integer
+          description: Property description
+          format: int32
+        minute:
+          maximum: 59
+          minimum: 0
+          type: integer
+          description: Property description
+          format: int32
+        nano:
+          maximum: 999
+          minimum: 0
+          type: integer
+          description: Property description
+          format: int32
+        second:
+          maximum: 59
+          minimum: 0
+          type: integer
+          description: Property description
+          format: int32
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: request status code
+          format: int32
+          enum:
+            - 200
+        status:
+          type: string
+          description: request status
+          enum:
+            - fail
+            - success
+            - invalid
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: request status code
+          format: int32
+          enum:
+            - 401
+            - 404
+        status:
+          type: string
+          description: request status
+          enum:
+            - fail
+        errorCode:
+          type: integer
+          description: Property description
+          format: int32
+        validationErrorCode:
+          type: string
+          description: Property description
+        x-b3-traceid:
+          type: integer
+          description: Property description
+          format: int32
+    ValidationField:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Property description
+        validationErrorCode:
+          type: string
+          description: Property description
+    ValidationResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: request status code
+          format: int32
+          enum:
+            - 405
+        status:
+          type: string
+          description: request status
+          enum:
+            - invalid
+        validationList:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationField"
